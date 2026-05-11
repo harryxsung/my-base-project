@@ -1,0 +1,26 @@
+name: Auto Commit
+
+on:
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+      - name: Make 100 commits
+        run: |
+          for i in $(seq 1 100); do
+            echo "Commit #$i - $(date)" >> log.txt
+            git add .
+            git commit -m "build: update log #$i"
+          done
+
+      - name: Push
+        run: git push
